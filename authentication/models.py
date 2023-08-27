@@ -4,7 +4,7 @@ from django.db import models
 
 class User(AbstractUser):
     
-    AUTHOR = 'Autheur'
+    AUTHOR = 'Auteur'
     REVIEWER = 'Critique Littéraire'
 
     ROLE_CHOICES = (

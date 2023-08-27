@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+
+    
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="{% url 'home' %}">Home</a>
+        
+        <a class="nav-item nav-link" href="{% url 'ticket-list' %}">Billet</a>
+        <a class="nav-item nav-link" href="{% url 'logout' %}" class="get-started-btn">Logout</a>
+        <a class="nav-item nav-link" href="{% url 'add_article' %}">Nouveau Billet</a>
+        <a class="nav-item nav-link" href="{% url 'add_ticket_and_review' %}">Nouvelle Critique</a>
+        
+        
+        
+
+
+
+        {%  if user.is_authenticated %}
+        <p class="my-2 my-lg-0">Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
+    {% endif %}
+    
+    </div>
+    </div>
+    
+  </nav>

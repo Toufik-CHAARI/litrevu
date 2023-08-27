@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ ticket.title }}</h2>
+<p>Posted by: {{ ticket.user }}</p>
+<img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="300">
+
+<h3>Description:</h3>
+<p>{{ ticket.description }}</p>
+
+{% if review %}
+<h3>Review by {{ review.user }}:</h3>
+<p>Rating: {{ review.rating }}/5</p>
+<h4>{{ review.headline }}</h4>
+<p>{{ review.body }}</p>
+{% else %}
+<p>No review available for this ticket.</p>
+{% endif %}
+{% endblock %}
