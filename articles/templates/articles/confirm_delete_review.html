@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Etes-vous sur de vouloir supprimer cette critique?</h2>
+
+<p>{{ review.headline }}</p>
+<p>{{ review.body }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Supprimer la critique</button>
+    <a href="{% url 'ticket-list' %}">Annuler</a>  <!-- or a link to the review's detail page -->
+</form>
+
+{% endblock %}

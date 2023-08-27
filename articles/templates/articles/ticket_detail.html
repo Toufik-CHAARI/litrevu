@@ -13,7 +13,18 @@
 <p>Rating: {{ review.rating }}/5</p>
 <h4>{{ review.headline }}</h4>
 <p>{{ review.body }}</p>
+<a href="{% url 'update_review' review.id %}" > Modifier la critique</a>
+<a href="{% url 'delete_review' review.id %}" > supprimer une critique</a>
 {% else %}
-<p>No review available for this ticket.</p>
+<p> Aucune revue n'est disponible pour ce billet.</p>
 {% endif %}
-{% endblock %}
+
+<a href="{% url 'update_ticket' ticket.id %}" > Modifier le billet</a>
+<a href="{% url 'delete_ticket' ticket.id %}" onclick="return confirm('Etes-vous sur de vouloir supprimer ce billet?');">Supprimer le billet</a>
+<a href="{% url 'add_review_to_ticket' ticket.id %}" > Ajouter une critique</a>
+
+# need to add a modal window for deletion
+
+
+
+{% endblock  %}

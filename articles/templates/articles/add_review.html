@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Ajouter une critique au billet: {{ ticket.title }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ review_form.as_p }}
+    <button type="submit">Ajouter une critique</button>
+</form>
+
+{% endblock %}
