@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- If the user isn't the owner, display the modal -->
+{% if not_owner %}
+<script>
+    $(document).ready(function(){
+        $('#notOwnerModal').modal('show');
+    });
+</script>
+{% endif %}
+
+<div class="modal fade" id="notOwnerModal" tabindex="-1" role="dialog" aria-labelledby="notOwnerLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notOwnerLabel">Action Impossible</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Vous n avez pas la permission de supprimer ce billet.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href='{% url 'ticket_detail' ticket.id  %}'">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

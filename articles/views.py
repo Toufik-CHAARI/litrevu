@@ -6,6 +6,8 @@ from django.conf.urls.static import static
 from . import forms
 from . import models
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from authentication.models import User
 
 
 
@@ -17,7 +19,7 @@ def home(request):
 def add_article(request):
     article_form = forms.TicketForm()
     if request.method == 'POST':
-        article_form = forms.TicketForm(request.POST, request.FILES)  # Include FILES for image handling
+        article_form = forms.TicketForm(request.POST, request.FILES)  
 
         if article_form.is_valid():
             ticket = article_form.save(commit=False)  
@@ -41,6 +43,14 @@ def ticket_list(request):
 def update_ticket(request, ticket_id):
     ticket_instance = get_object_or_404(models.Ticket, id=ticket_id)
     
+    if ticket_instance.user != request.user:
+        # Return the user to a suitable page with a warning message or use the modal approach
+        # I'll use the modal approach here:
+        context = {
+            'not_owner': True,
+        }
+        return render(request, 'articles/update_ticket.html', context)
+
     if request.method == 'POST':
         article_form = forms.TicketForm(request.POST, instance=ticket_instance)
         photo_form = forms.ImageForm(request.POST, request.FILES, instance=ticket_instance)
@@ -49,7 +59,6 @@ def update_ticket(request, ticket_id):
             article_form.save()
             photo_form.save()
             return redirect('ticket-list')
-    
     else:
         article_form = forms.TicketForm(instance=ticket_instance)
         photo_form = forms.ImageForm(instance=ticket_instance)
@@ -60,6 +69,7 @@ def update_ticket(request, ticket_id):
     }
     
     return render(request, 'articles/update_ticket.html', context)
+
 
 @login_required
 def create_ticket_and_review(request):
@@ -93,44 +103,48 @@ def ticket_detail(request, ticket_id):
     ticket = get_object_or_404(models.Ticket, id=ticket_id)
     
     try:
-        review = models.Review.objects.get(ticket=ticket)
+        reviews = models.Review.objects.filter(ticket=ticket)
     except models.Review.DoesNotExist:
         review = None
-
+    user_has_reviewed = models.Review.objects.filter(ticket=ticket, user=request.user).exists()
     context = {
         'ticket': ticket,
-        'review': review
+        'reviews': reviews,
+        'user_has_reviewed': user_has_reviewed,
     }
 
     return render(request, 'articles/ticket_detail.html', context)
 
-
 @login_required
 def delete_ticket(request, ticket_id):
-    ticket = get_object_or_404(models.Ticket, id=ticket_id)    
-    if request.user == ticket.user:
-        ticket.delete()
-        messages.success(request, 'Votre billet a été supprimé avec succès.')
-    else:
-        messages.error(request, 'Vous n avez pas la permission de supprimer ce billet .')
-
-    return redirect('ticket-list')
+    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    
+    if request.method == 'POST':
+        if request.user == ticket.user:
+            ticket.delete()
+            return redirect('ticket-list')
+        else:
+            return redirect('ticket-detail', ticket_id=ticket_id)
+    
+    context = {
+        'ticket': ticket,
+        'not_owner': request.user != ticket.user
+    }
+    return render(request, 'articles/delete_ticket.html', context)
 
 @login_required
 def update_review(request, review_id):
-    review = get_object_or_404(models.Review, id=review_id)
-    
+    review = get_object_or_404(models.Review, id=review_id)    
     if review.user != request.user:
         messages.error(request, "You do not have permission to edit this review.")
         return redirect('ticket-list') 
-
     if request.method == "POST":
         review_form = forms.ReviewForm(request.POST, instance=review)
 
         if review_form.is_valid():
             review_form.save()
             messages.success(request, 'Review updated successfully!')
-            return redirect('ticket-list')  
+            return redirect('ticket-list')
 
     else:
         review_form = forms.ReviewForm(instance=review)
@@ -142,11 +156,11 @@ def update_review(request, review_id):
 
 @login_required
 def add_review_to_ticket(request, ticket_id):
-    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    ticket = get_object_or_404(models.Ticket, id=ticket_id)   
     
     if models.Review.objects.filter(ticket=ticket, user=request.user).exists():
         messages.error(request, "You've already reviewed this ticket.")
-        return redirect('ticket-list')  # or redirect to the ticket's detail page
+        return redirect('ticket-list')  
 
     if request.method == "POST":
         review_form = forms.ReviewForm(request.POST)
@@ -162,9 +176,12 @@ def add_review_to_ticket(request, ticket_id):
     else:
         review_form = forms.ReviewForm()
 
+    
+    
     return render(request, 'articles/add_review.html', {
         'review_form': review_form,
         'ticket': ticket,
+        
     })
     
 @login_required
@@ -180,3 +197,53 @@ def delete_review(request, review_id):
     else:
         messages.error(request, "You don't have permission to delete this review.")
         return redirect('ticket-list')  
+    
+
+@login_required
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(User, id=user_id)
+    if request.user != user_to_follow:
+        models.UserFollows.objects.get_or_create(user=request.user, followed_user=user_to_follow)
+        messages.success(request, f"You are now following {user_to_follow.username}!")
+    else:
+        messages.error(request, "You can't follow yourself!")
+    return redirect('user_search')  
+
+@login_required
+def unfollow_user(request, user_id):
+    user_to_unfollow = get_object_or_404(User, id=user_id)
+    try:
+        follow_relation = models.UserFollows.objects.get(user=request.user, followed_user=user_to_unfollow)
+        follow_relation.delete()
+        messages.success(request, f"You have unfollowed {user_to_unfollow.username}.")
+    except models.UserFollows.DoesNotExist:
+        messages.error(request, "You weren't following this user.")
+    return redirect('user_search')  
+
+
+@login_required
+def user_search(request):
+    query = request.GET.get('q')
+    users = []
+    if query:
+        users = get_user_model().objects.filter(username__icontains=query).exclude(id=request.user.id)
+        
+    results = []
+    for user in users:
+        followed = request.user.following.filter(followed_user=user).exists()
+        results.append({'user': user, 'followed': followed})
+
+    followers = request.user.followed_by.all()
+    following = request.user.following.all()
+    user_not_found = False
+    if query and not users:
+        user_not_found = True
+
+    context = {
+        'results': results,
+        'followers': followers,
+        'following': following,
+        'user_not_found': user_not_found
+    }
+
+    return render(request, 'articles/user_search.html', context)

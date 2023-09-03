@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Suivre d'autres utilisateurs </h2>
+<form method="get">
+    <input type="text" name="q" placeholder="Nom d'utilisateur ">
+    <input type="submit" value="Envoyer">
+</form>
+
+{% if results %}
+<h3>Résultat de la recherche:</h3>
+<ul>
+    {% for result in results %}
+    <li>
+        {{ result.user.username }}
+        {% if not result.followed %}
+            <a href="{% url 'follow_user' result.user.id %}">S'abonner</a>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<h3>Mes Abonnements:</h3>
+<ul>
+    {% for relation in following %}
+        <li>{{ relation.followed_user.username }}</li>
+    <button>    <a href="{% url 'unfollow_user' relation.followed_user.id %}">Se désabonner</a></button>
+        {% endfor %}
+</ul>
+
+<h3>Mes Abonnés:</h3>
+<ul>
+    {% for relation in followers %}
+        <li>{{ relation.user.username }}</li>
+        
+    {% endfor %}
+</ul>
+
+<h3>utilisateurs bloqués </h3>
+<!-- Script to trigger modal if user not found -->
+{% if user_not_found %}
+<script>
+    $(document).ready(function(){
+        $('#userNotFoundModal').modal('show');
+    });
+</script>
+{% endif %}
+<div class="modal fade" id="userNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="userNotFoundLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userNotFoundLabel">Utilisateur Inconnu</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          L'utilisateur que vous recherchez n'existe pas.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+{% endblock %}
+
+
