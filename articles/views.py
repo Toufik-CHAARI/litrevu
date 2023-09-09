@@ -52,20 +52,18 @@ def update_ticket(request, ticket_id):
         return render(request, 'articles/update_ticket.html', context)
 
     if request.method == 'POST':
-        article_form = forms.TicketForm(request.POST, instance=ticket_instance)
-        photo_form = forms.ImageForm(request.POST, request.FILES, instance=ticket_instance)
+        ticket_form = forms.TicketForm(request.POST, request.FILES, instance=ticket_instance)
+        #article_form = forms.TicketForm(request.POST, instance=ticket_instance)
+        #photo_form = forms.ImageForm(request.POST, request.FILES, instance=ticket_instance)
         
-        if all([article_form.is_valid(), photo_form.is_valid()]):
-            article_form.save()
-            photo_form.save()
+        if ticket_form.is_valid():
+            ticket_form.save()
             return redirect('ticket-list')
     else:
-        article_form = forms.TicketForm(instance=ticket_instance)
-        photo_form = forms.ImageForm(instance=ticket_instance)
+        ticket_form = forms.TicketForm(instance=ticket_instance)
     
     context = {
-        'article_form': article_form,
-        'photo_form': photo_form,
+        'ticket_form': ticket_form,
     }
     
     return render(request, 'articles/update_ticket.html', context)
@@ -187,16 +185,18 @@ def add_review_to_ticket(request, ticket_id):
 @login_required
 def delete_review(request, review_id):
     review = get_object_or_404(models.Review, id=review_id)
+    not_owner = request.user != review.user and not request.user.has_perm('articles.delete_review')
    
-    if request.user == review.user or request.user.has_perm('articles.delete_review'):
-        if request.method == 'POST':
-            review.delete()
-            messages.success(request, 'Review deleted successfully!')
-            return redirect('ticket-list')  
-        return render(request, 'articles/confirm_delete_review.html', {'review': review})
-    else:
-        messages.error(request, "You don't have permission to delete this review.")
-        return redirect('ticket-list')  
+    if request.method == 'POST' and not not_owner:
+        review.delete()
+        return redirect('ticket-list')
+    
+    context = {
+        'review': review,
+        'not_owner': not_owner
+    }
+    return render(request, 'articles/confirm_delete_review.html', context)
+
     
 
 @login_required

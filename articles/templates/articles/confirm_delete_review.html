@@ -12,16 +12,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                Etes vous sur de vouloir supprimer ce billet: {{ ticket.title }}?
+                Etes vous sur de vouloir supprimer cette critique: {{ review.title }}? 
                 {% if not_owner %}
                     <div class="alert alert-warning" role="alert">
-                        Action Impossible: Vous n'etes pas l'auteur de ce billet !!!
+                        Action Impossible: Vous n'etes pas l'auteur de cette critique !!! 
                     </div>
                 {% endif %}
             </div>
             <div class="modal-footer">
                 {% if not not_owner %}
-                    <form method="post" action="{% url 'delete_ticket' ticket.id %}">
+                    <form method="post" action="{% url 'delete_review' review.id %}">
                         {% csrf_token %}
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                         <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -33,7 +33,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     $(document).ready(function(){

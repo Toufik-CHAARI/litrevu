@@ -3,8 +3,9 @@
 {% block content %}
 <h2>{{ ticket.title }}</h2>
 <p>Publié par : {{ ticket.user }}</p>
+{% if ticket.image %}
 <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="300">
-
+{% endif  %}
 <h3>Description:</h3>
 <p>{{ ticket.description }}</p>
 

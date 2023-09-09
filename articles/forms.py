@@ -6,15 +6,11 @@ from django import forms
 class TicketForm(forms.ModelForm) :
     class Meta:
         model = models.Ticket
-        fields = ['title', 'description', 'image']
-        #fields = '__all__'
-        
+        fields = ['title', 'description','image']
+        #fields = '__all__'      
 
 
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = models.Ticket
-        fields = ['image']
+
         
         
 class ReviewForm(forms.ModelForm):

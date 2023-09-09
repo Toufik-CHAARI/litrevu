@@ -1,17 +1,22 @@
 {% extends "base.html" %}  
 {% load static %}
+
+
 {% block content %}
     <h2>Articles</h2>
     <ul>
     {% for ticket in tickets %}
         <li>
-
+            {% if ticket.image %}
             <a href="{% url 'ticket_detail' ticket.id  %}"><img src="{{ ticket.image.url }}"" alt="{{ ticket.title }}" width="300"" ></a>
-           <h3>{{ ticket.title }}</h3> 
+            {% endif %}
+            <a href="{% url 'ticket_detail' ticket.id  %}"> <h3>{{ ticket.title }}</h3>  </a>
            <p>Autheur : {{ ticket.user }} </p>
            <p>{{ ticket.description }}</p>
            
         </li>
     {% endfor %}
     </ul>
+
+
 {% endblock %}

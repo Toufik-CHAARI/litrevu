@@ -3,8 +3,8 @@
     <h2>Modifier un billet</h2>
     <form method="post" enctype="multipart/form-data">
      
-        {{ article_form.as_p }}
-        {{ photo_form.as_p }}
+        {{ ticket_form.as_p }}
+    
         {% csrf_token %}
         <button type="submit" >Publier</button>
     </form>
@@ -30,7 +30,7 @@
     </div>
   </div>
   
- <!-- Triggering the modal if the user is not the owner -->
+ 
 {% if not_owner %}
 <script>
     $(document).ready(function(){
