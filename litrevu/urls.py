@@ -39,6 +39,7 @@ urlpatterns = [
     path('follow/<int:user_id>/', articles.views.follow_user, name='follow_user'),
     path('unfollow/<int:user_id>/', articles.views.unfollow_user, name='unfollow_user'),
     path('Abonnements', articles.views.user_search, name='user_search'),
+    path('flux', articles.views.user_feed, name='user_feed'),
 
 
     

@@ -247,3 +247,57 @@ def user_search(request):
     }
 
     return render(request, 'articles/user_search.html', context)
+
+
+from django.shortcuts import render
+from django.utils.timezone import now
+from django.db.models import Value, CharField
+from .models import Ticket, Review, UserFollows
+from django.contrib.auth.decorators import login_required
+
+
+
+@login_required
+def user_feed(request):
+    from django.db.models import Value, CharField      
+    followed_users = models.UserFollows.objects.filter(user=request.user).values_list('followed_user', flat=True)
+    
+    from django.db.models import F
+        
+    following_reviews = Review.objects.filter(user__in=followed_users).values(
+        'id', 'headline', 'body', 'rating', 'time_created', 'ticket_id', 'user__username', 'ticket__title', 'ticket__user__username'
+    ).annotate(
+        content_type=Value('review', CharField()),
+        ticket_title=F('ticket__title'),
+        ticket_author=F('ticket__user__username')
+    )    
+    
+    
+    following_tickets = Ticket.objects.filter(user__in=followed_users).values('id', 'title', 'description', 'image', 'time_created', 'user__username').annotate(content_type=Value('ticket', CharField())).order_by('-time_created')
+    my_tickets = Ticket.objects.filter(user=request.user).values('id', 'title', 'description', 'image', 'time_created', 'user__username').annotate(content_type=Value('ticket', CharField())).order_by('-time_created')
+    my_reviews = Review.objects.filter(user=request.user).values(
+    'id', 'headline', 'body', 'rating', 'time_created', 
+    'ticket_id', 'user__username', 'ticket__title'
+    ).annotate(content_type=Value('review', CharField())).order_by('-time_created')
+    
+    my_ticket_reviews = Review.objects.filter(ticket__user=request.user).values(
+    'id', 'headline', 'body', 'rating', 'time_created', 'ticket_id', 'ticket__title', 'user__username'
+    ).annotate(content_type=Value('review', CharField())).order_by('-time_created')
+
+    
+    
+    context = {
+        'following_tickets': following_tickets,
+        'my_tickets': my_tickets,
+        'my_reviews': my_reviews,
+        'my_ticket_reviews': my_ticket_reviews,
+        'following_reviews': following_reviews
+    }
+
+   
+    if following_tickets:
+        print(following_tickets[0]['user__username'])
+    
+
+    return render(request, 'articles/user_feed.html', context)
+

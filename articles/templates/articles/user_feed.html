@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h2>Feed Utilisateur</h2>
+
+<h3>Billets et les critiques de tous les utilisateurs que je suis </h3>
+{% if following_tickets or following_reviews %}
+<ul>
+    <h4>Billets</h4>
+    {% for item in following_tickets %}
+    <li>
+           <strong>Billet:</strong><a href="{% url 'ticket_detail' item.id %}"> {{ item.title }} </a> par {{ item.user__username }}<br>
+           <a href="{% url 'ticket_detail' item.id %}"> <img src="media/{{ item.image }}" alt="{{ item.title }}" width="150"><br></a>
+        {{ item.description }}<br>
+        Créé le: {{ item.time_created }}
+    </li>
+    {% endfor %}
+    <h4>Critiques</h4>
+    {% for item in following_reviews %}
+    <li>
+        <strong>Avis sur le billet intitulé :</strong> <a href="{% url 'ticket_detail' item.ticket_id %}">{{ item.ticket_title }}</a>  créé par {{ item.ticket_author }}<br>
+        <strong>Titre de l'avis :</strong> {{ item.headline }} par {{ item.user__username }}<br>
+        Note: {{ item.rating }}/5<br>
+        {{ item.body }}<br>
+        Créé le: {{ item.time_created }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Aucun billet ou avis des utilisateurs suivis pour le moment.</p>
+{% endif %}
+
+<h3>Les billets et critiques que j'ai publié</h3>
+{% if my_tickets or my_reviews %}
+<ul>
+    {% for item in my_tickets %}
+    <li>
+        <strong>Billet par {{ item.user__username }}:</strong> <a href="{% url 'ticket_detail' item.id %}"> {{ item.title }}</a><br>
+        <a href="{% url 'ticket_detail' item.id %}"> <img src="media/{{ item.image }}" alt="{{ item.title }}" width="150"></a><br>
+        {{ item.description }}<br>
+        Créé le: {{ item.time_created }}
+    </li>
+    {% endfor %}
+    
+    {% for item in my_reviews %}
+    <li>
+        <strong>Avis de {{ item.user__username }} sur le billet:</strong><a href="{% url 'ticket_detail' item.ticket_id %}">  {{ item.ticket__title }}</a><br>
+        <strong>Avis:</strong> {{ item.headline }}<br>
+        Note: {{ item.rating }}/5<br>
+        {{ item.body }}<br>
+        Créé le: {{ item.time_created }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Vous n'avez pas encore créé de billets ou donné d'avis.</p>
+{% endif %}
+
+<h3>Avis en réponse à mes billets (comprends les utilisateurs que je ne suis pas)</h3>
+{% if my_ticket_reviews %}
+<ul>
+    {% for review in my_ticket_reviews %}
+    <li>
+        <strong>Avis:</strong> {{ review.headline }} par {{ review.user__username }}<br>
+        Note: {{ review.rating }}/5<br>
+        {{ review.body }}<br>
+        Créé le: {{ review.time_created }}
+        Ticket associé: <a href="{% url 'ticket_detail' review.ticket_id %}">{{ review.ticket__title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Aucun avis en réponse à vos billets pour le moment.</p>
+{% endif %}
+
+{% endblock %}
+
+
+
