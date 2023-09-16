@@ -98,40 +98,7 @@
     </symbol>
   </svg>
 
-  <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-    <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
-            id="bd-theme"
-            type="button"
-            aria-expanded="false"
-            data-bs-toggle="dropdown"
-            aria-label="Toggle theme (auto)">
-      <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
-      <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-          <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#sun-fill"></use></svg>
-          Light
-          <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-          <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
-          Dark
-          <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-          <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#circle-half"></use></svg>
-          Auto
-          <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-        </button>
-      </li>
-    </ul>
-  </div>
+  
 
   
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -194,7 +161,7 @@
         </article>
         {% endfor %}
         {% else %}
-        <p>Aucun billet ou avis des utilisateurs suivis pour le moment.</p>
+        <p>Aucun Post ou avis d'utilisateurs suivis pour le moment.</p>
         {% endif %}
         
       <!-- second section-->  
@@ -230,7 +197,7 @@
 
         </article>
         {% else %}
-        <p>Vous n'avez pas encore créé de billets ou donné d'avis.</p>
+        <p>Vous n'avez pas encore créé de Post ou de critique.</p>
         {% endif  %}
        <!-- end of second section-->  
   
@@ -247,7 +214,7 @@
         <div class="position-sticky" style="top: 2rem;">
           <div class="p-4 mb-3 bg-body-tertiary rounded">
             <h4 class="fst-italic">About</h4>
-            <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+            <p class="mb-0">Morbi eu lacinia mauris. Vivamus aliquam hendrerit nulla non vestibulum. Proin id ornare ex. Cras tincidunt erat sit amet leo porttitor eleifend. Aenean ut sapien eleifend sapien efficitur eleifend vel eget sapien</p>
           </div>
   
           <div>
@@ -269,7 +236,7 @@
               {% endfor %}  
               </ul>
               {% else %}
-              <p>Aucun avis en réponse à vos billets pour le moment.</p>
+              <p>Aucun crtique en réponse à vos Posts pour le moment.</p>
               {% endif %}
             </div>
   

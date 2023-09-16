@@ -13,7 +13,7 @@
 <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="300">
 {% endif  %}
             </div>
-
+<br>
 <p>{{ ticket.description }}</p>
 
 {% if request.user == ticket.user %}
@@ -47,11 +47,13 @@
 <p> Aucune revue n'est disponible pour ce billet.</p>
 {% endif %}
 
-
+<br>
+<hr>
 
 </div>
 </div>
 </div> 
+
 </main>
 
 

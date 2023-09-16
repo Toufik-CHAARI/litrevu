@@ -4,10 +4,12 @@ from django import forms
 
 
 class TicketForm(forms.ModelForm) :
+    title = forms.CharField(label="Titre du Post", max_length=128)
+    description = forms.CharField(label="Description", max_length=8192, widget=forms.Textarea)
     class Meta:
         model = models.Ticket
         fields = ['title', 'description','image']
-        #fields = '__all__'      
+             
 
 
 RATING_CHOICES = (

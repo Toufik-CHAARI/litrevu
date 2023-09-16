@@ -29,7 +29,7 @@
     <li class="list-group-item" >
         {{ result.user.username | capfirst}}
         {% if not result.followed %}
-        <button type="button" class="btn btn-outline-primary"><a href="{% url 'follow_user' result.user.id %}">S'abonner</a></button>
+        <button type="button" class="btn btn-outline-warning"><a href="{% url 'follow_user' result.user.id %}">S'abonner</a></button>
         {% endif %}</li>
     
  

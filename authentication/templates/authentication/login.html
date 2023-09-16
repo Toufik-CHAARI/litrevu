@@ -26,14 +26,14 @@
                         {% csrf_token %}
 
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form2Example11">{{ form.username.label }}</label>
+                            <label class="form-label" for="form2Example11" autocomplete="username">{{ form.username.label }}</label>
                             {{ form.username|add_class:"form-control"|attr:" id=form2Example11" }}
                           
                            
                         </div>
       
                         <div class="form-outline mb-4">
-                          <label class="form-label" for="form2Example22">{{ form.password.label }}</label>
+                          <label class="form-label" for="form2Example22" autocomplete="current-password" >{{ form.password.label }}</label>
                           {{ form.password|add_class:"form-control"|attr:"id=form2Example22" }}
                         </div>
       
