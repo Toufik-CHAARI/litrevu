@@ -1,11 +1,39 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
+
 {% block content %}
-    <h2>Écrire un billet</h2>
-    <form method="post" enctype="multipart/form-data">
-     
-        {{ article_form.as_p }}
-        {{ photo_form.as_p }}
+    <h2>Écrire un Post</h2>
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        
+        {% for field in article_form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% render_field field class="form-control" %}
+            {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        {% for field in photo_form %}
+        <div class="form-group">
+            {% if field.field.widget.input_type == 'file' %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <div class="custom-file">
+                {% render_field field class="custom-file-input" %}
+                <label class="custom-file-label" for="{{ field.id_for_label }}">Choose file</label>
+            </div>
+            {% else %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% render_field field class="form-control" %}
+            {% endif %}
+            {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+        {% endfor %}
+
         {% csrf_token %}
-        <button type="submit" >Publier</button>
+        <button type="submit" class="btn btn-primary">Publier</button>
     </form>
 {% endblock content %}

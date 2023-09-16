@@ -8,6 +8,10 @@ from . import models
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from authentication.models import User
+from django.shortcuts import render
+from django.utils.timezone import now
+from django.db.models import Value, CharField
+from .models import Ticket, Review, UserFollows
 
 
 
@@ -249,11 +253,7 @@ def user_search(request):
     return render(request, 'articles/user_search.html', context)
 
 
-from django.shortcuts import render
-from django.utils.timezone import now
-from django.db.models import Value, CharField
-from .models import Ticket, Review, UserFollows
-from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -281,7 +281,8 @@ def user_feed(request):
     ).annotate(content_type=Value('review', CharField())).order_by('-time_created')
     
     my_ticket_reviews = Review.objects.filter(ticket__user=request.user).values(
-    'id', 'headline', 'body', 'rating', 'time_created', 'ticket_id', 'ticket__title', 'user__username'
+    'id', 'headline', 'body', 'rating', 'time_created', 'ticket_id', 
+    'ticket__title', 'user__username', 'ticket__image'  # Add 'ticket__image' here
     ).annotate(content_type=Value('review', CharField())).order_by('-time_created')
 
     

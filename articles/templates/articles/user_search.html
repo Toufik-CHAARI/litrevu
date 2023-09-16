@@ -1,46 +1,75 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
+  <main class="container">
+    <div class="row g-5">
+      <div class="col-md-12"> 
 
-<h2>Suivre d'autres utilisateurs </h2>
+  <div style="text-align:center">  
+    <br><br>  
+<h2 >Suivre d'autres utilisateurs </h2>
+<br>
+
 <form method="get">
-    <input type="text" name="q" placeholder="Nom d'utilisateur ">
-    <input type="submit" value="Rehercher">
+  
+      <input type="text" name="q" placeholder="Nom d'utilisateur ">
+      
+      <input type="submit" value="Rehercher">
+    
 </form>
 
+
+<br>
 {% if results %}
-<h3>Résultat de la recherche:</h3>
-<ul>
+<h2>Résultat de la recherche:</h2>
+<br>
+<ul class="list-group">
     {% for result in results %}
-    <li>
-        {{ result.user.username }}
+    <li class="list-group-item" >
+        {{ result.user.username | capfirst}}
         {% if not result.followed %}
-            <a href="{% url 'follow_user' result.user.id %}">S'abonner</a>
-        {% endif %}
-    </li>
-    {% endfor %}
+        <button type="button" class="btn btn-outline-primary"><a href="{% url 'follow_user' result.user.id %}">S'abonner</a></button>
+        {% endif %}</li>
+    
+ 
 </ul>
+{% endfor %}
 {% endif %}
 
 
-<h3>Mes Abonnements:</h3>
-<ul>
-    {% for relation in following %}
-        <li>{{ relation.followed_user.username }}</li>
-    <button>    <a href="{% url 'unfollow_user' relation.followed_user.id %}">Se désabonner</a></button>
-        {% endfor %}
+<br><br>
+<hr>
+
+ 
+
+<h2>Mes Abonnements:</h2>
+<ul class="list-group">
+      {% for relation in following %}
+        <li class="list-group-item" >{{ relation.followed_user.username | capfirst }}  <button type="button" class="btn btn-outline-danger">    <a href="{% url 'unfollow_user' relation.followed_user.id %}">Se désabonner</a></button>
+          {% endfor %}</li>
+        
 </ul>
 
-<h3>Mes Abonnés:</h3>
-<ul>
+<br><br>
+
+
+
+<hr>
+
+<h2>Mes Abonnés:</h2>
+<br><br>
+<ul class="list-group">
     {% for relation in followers %}
-        <li>{{ relation.user.username }}</li>
+        <li class="list-group-item">{{ relation.user.username | capfirst }}</li>
         
     {% endfor %}
 </ul>
+<br><br>
+</div></div></div>
 
-<h3>utilisateurs bloqués </h3>
-<!-- Script to trigger modal if user not found -->
+<hr>
+
 {% if user_not_found %}
 <script>
     $(document).ready(function(){
@@ -67,6 +96,8 @@
     </div>
   </div>
   
+</main>
+</div>
 
 
 {% endblock %}

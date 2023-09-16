@@ -1,32 +1,40 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
-
-    
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link active" href="{% url 'home' %}">Home</a>
+<div class="container">
+    <header class="border-bottom lh-1 py-3">
+      <div class="row flex-nowrap justify-content-between align-items-center">
+        <div class="col-4 pt-1">
+          <a class="link-secondary" href="#">Bonjour {{ request.user | capfirst }}</a>
+        </div>
+        <div class="col-4 text-center">
+          <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">LITrevu</a>
+        </div>
         
-        <a class="nav-item nav-link" href="{% url 'ticket-list' %}">Billet</a>
-        <a class="nav-item nav-link" href="{% url 'user_feed' %}">Flux</a>           
-        <a class="nav-item nav-link" href="{% url 'add_article' %}">Nouveau Billet</a>
-        <a class="nav-item nav-link" href="{% url 'add_ticket_and_review' %}">Nouvelle Critique</a>
-        <a class="nav-item nav-link" href="{% url 'user_search' %}" class="get-started-btn">Abonnements</a>
-        <a class="nav-item nav-link" href="{% url 'logout' %}" class="get-started-btn">Logout</a>
+       
+        {% if request.user.is_authenticated  %}
+        <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'logout' %}">Déconnexion</a>
         
         
+          </div>
+          {% else %}
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'login' %}">Se connecter</a>
         
+        
+          </div>
+        {% endif %}
+      
+        
+      </div>
+    </header>
 
+<div class="nav-scroller py-1 mb-3 border-bottom">
+    <nav class="nav nav-underline justify-content-between">
+      <a class="nav-item nav-link link-body-emphasis active" href="{% url 'user_feed' %}">Flux</a>
+      <a class="nav-item nav-link link-body-emphasis" href="{% url 'ticket-list' %}">Posts publiés</a>
+      <a class="nav-item nav-link link-body-emphasis" href="{% url 'add_article' %}">Nouveau Post</a>
+      <a class="nav-item nav-link link-body-emphasis" href="{% url 'add_ticket_and_review' %}">Nouvelle critique </a>
+      <a class="nav-item nav-link link-body-emphasis" href="{% url 'user_search' %}">Mes abonnements</a>
+      
 
-
-        {%  if user.is_authenticated %}
-        <p class="my-2 my-lg-0">Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
-    {% endif %}
-    
-    </div>
-    </div>
-    
-  </nav>
+    </nav>
+  </div>

@@ -1,22 +1,35 @@
 {% extends "base.html" %}  
-{% load static %}
+
 
 
 {% block content %}
-    <h2>Articles</h2>
+
+<div class="container">
+    <main class="container">
+      <div class="row g-5">
+        <div class="col-md-12"> 
+            
+
+    <h1 style="text-align:center;">Liste de tous les Posts </h1>
     <ul>
     {% for ticket in tickets %}
-        <li>
+       
+            <div style="text-align:center;">
             {% if ticket.image %}
             <a href="{% url 'ticket_detail' ticket.id  %}"><img src="{{ ticket.image.url }}"" alt="{{ ticket.title }}" width="300"" ></a>
             {% endif %}
-            <a href="{% url 'ticket_detail' ticket.id  %}"> <h3>{{ ticket.title }}</h3>  </a>
-           <p>Autheur : {{ ticket.user }} </p>
+            <a href="{% url 'ticket_detail' ticket.id  %}"> <h2>{{ ticket.title }}</h2>  </a>
+           <p>Post créé le {{ ticket.time_created }} par <strong>{{ ticket.user | capfirst }}</strong> </p>
+        </div> 
            <p>{{ ticket.description }}</p>
            
-        </li>
+        
+        <br><hr><br>
     {% endfor %}
     </ul>
 
+</main>
+</div>
+</div> 
 
 {% endblock %}

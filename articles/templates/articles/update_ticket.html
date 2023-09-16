@@ -1,14 +1,28 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
+
 {% block content %}
     <h2>Modifier un billet</h2>
     <form method="post" enctype="multipart/form-data">
-     
-        {{ ticket_form.as_p }}
-    
+        
+        {% for field in ticket_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% render_field field class="form-control" %}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="invalid-feedback">
+                        {{ field.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
         {% csrf_token %}
-        <button type="submit" >Publier</button>
+        <button type="submit" class="btn btn-primary">Publier</button>
     </form>
-
 
 <!-- Modal -->
 <div class="modal fade" id="notOwnerModal" tabindex="-1" role="dialog" aria-labelledby="notOwnerModalLabel" aria-hidden="true">
