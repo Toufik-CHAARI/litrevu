@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load static %}
 <link href="style.css" rel="stylesheet">
 {% block content %}
     
@@ -15,7 +16,7 @@
                     <div class="card-body p-md-5 mx-md-4">
       
                       <div class="text-center">
-                        <img src="https://user.oc-static.com/upload/2023/06/29/168805567091_LITrevu%20banner.png"
+                        <img src="{% static 'assets/LITrevu banner.png' %}"
                           style="width: 285px; height: 185px;" alt="logo">
                         <h2 class="mt-1 mb-5 pb-1">Formulaire de connexion</h2>
                       </div>
