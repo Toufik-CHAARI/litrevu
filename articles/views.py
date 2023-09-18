@@ -67,7 +67,6 @@ def update_post(request, ticket_id):
     ticket_instance = get_object_or_404(models.Ticket, id=ticket_id)
 
     if ticket_instance.user != request.user:
-
         context = {
             "not_owner": True,
         }
@@ -224,7 +223,7 @@ def add_review_to_ticket(request, ticket_id):
     if models.Review.objects.filter(
         ticket=ticket, user=request.user
     ).exists():
-        messages.error(request, "You've already reviewed this ticket.")
+        
         return redirect("ticket-list")
 
     if request.method == "POST":
@@ -388,6 +387,7 @@ def user_feed(request):
             ticket_title=F("ticket__title"),
             ticket_author=F("ticket__user__username"),
         )
+        .order_by("-time_created")
     )
 
     following_tickets = (
@@ -443,7 +443,7 @@ def user_feed(request):
             "ticket_id",
             "ticket__title",
             "user__username",
-            "ticket__image",  # Add 'ticket__image' here
+            "ticket__image",  
         )
         .annotate(content_type=Value("review", CharField()))
         .order_by("-time_created")
