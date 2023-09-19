@@ -48,11 +48,16 @@
 
         
 
-
+       
 
         <div class="mb-3">
-          <a href="{% url 'home' %}">  <button class="btn btn-primary">Retour</button></a> <button type="submit" class="btn btn-primary">S’inscrire</button>
-        </div>
+          <button type="submit" class="btn btn-primary">S’inscrire</button>           
+        </div>  
+        
         
     </form>
+
+    <div class="mb-3">
+        <a href="{% url 'home' %}"> <button class="btn btn-primary"> Retour </button></a>
+     </div>
 {% endblock content %}
